@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account</title>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Delete Account</title>
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <style>
+            *,
+            *:before,
+            *:after {
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Nunito', sans-serif;
+                color: #384047;
+            }
+
+            form {
+                margin-top: 10%;
+                max-width: 500px;
+                margin: 10px auto;
+                padding: 10px 20px;
+                background: #f4f7f8;
+                border-radius: 8px;
+            }
+
+            h1 {
+                margin: 0 0 30px 0;
+                text-align: center;
+            }
+
+            input[type="email"],
+            input[type="password"] {
+                background: rgba(255, 255, 255, 0.1);
+                border: none;
+                font-size: 16px;
+                height: auto;
+                margin: 0;
+                outline: 0;
+                padding: 15px;
+                width: 100%;
+                background-color: #e8eeef;
+                color: #8a97a0;
+                box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+                margin-bottom: 30px;
+            }
+
+            button {
+                padding: 19px 39px 18px 39px;
+                color: #FFF;
+                background-color: #e74c3c;
+                /* Change this to your desired button color */
+                font-size: 18px;
+                text-align: center;
+                font-style: normal;
+                border-radius: 5px;
+                width: 100%;
+                border: 1px solid #c0392b;
+                /* Change this to your desired button border color */
+                border-width: 1px 1px 3px;
+                box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+                margin-bottom: 10px;
+            }
+
+            fieldset {
+                margin-bottom: 30px;
+                border: none;
+            }
+
+            legend {
+                font-size: 1.4em;
+                margin-bottom: 10px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            label.light {
+                font-weight: 300;
+                display: inline;
+            }
+
+            .number {
+                background-color: #5fcf80;
+                color: #fff;
+                height: 30px;
+                width: 30px;
+                display: inline-block;
+                font-size: 0.8em;
+                margin-right: 4px;
+                line-height: 30px;
+            }
+            .icon{
+                margin-left: 35%;
+                width: 30%;
+                height: 30%;
+            }
+        </style>
+    </head>
+
+<body>
+    <div class="row">
+        <div class="col-md-12">
+            <form>
+                <h1>Delete Account</h1>
+                <fieldset>
+                    <img class="icon" src="../cdl-icon.jpg" />
+            <h2>CDL-Driving Delete Account</h2>
+            <br />
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </fieldset>
+        <button type="button" onclick="deleteAccount()">Delete Account</button>
+        <h5>Powered by NETWADE</h5>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, deleteUser } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js';
+        import  FirebaseErrors from '../FirebaseErrors.js';
+        import firebaseConfig from '../firebaseConfig.js';
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        function deleteAccount() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    deleteUser(user)
+                        .then(() => {
+                            alert('Manual Account deleted successfully.');
+                        })
+                        .catch((error) => {
+                            alert('Failed to delete account: ' + FirebaseErrors[error?.code]);
+                        });
+                })
+                .catch((error) => {
+                    alert('Error signing in: ' + FirebaseErrors[error?.code]);
+                });
+        }
+
+        window.deleteAccount = deleteAccount;
+    </script>
+</body>
+
+</html>
